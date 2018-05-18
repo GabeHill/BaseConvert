@@ -128,17 +128,63 @@ std::string fromDec(std::string res, int base, int inNum) {
 	return res;
 }
 
+//unsigned int binaryNegator(unsigned int x) {
+//	x = ~x;
+//
+//}
+
+std::string binaryAddOne(std::string toAdd) {
+	std::string b = "1";
+	std::string result = ""; // Initialize result
+	int s = 0;          // Initialize digit sum
+
+	// Traverse both strings starting from last
+	// characters
+	int i = toAdd.size() - 1, j = b.size() - 1;
+	while (i >= 0 || j >= 0 || s == 1) {
+		// Comput sum of last digits and carry
+		s += ((i >= 0) ? toAdd[i] - '0' : 0);
+		s += ((j >= 0) ? b[j] - '0' : 0);
+
+		// If current digit sum is 1 or 3, add 1 to result
+		result = char(s % 2 + '0') + result;
+
+		// Compute carry
+		s /= 2;
+
+		// Move to next digits
+		i--;
+		j--;
+	}
+	return result;
+}
+
+std::string binaryStringNot(std::string inNum) {
+	for (int i = 0; i < inNum.size(); i++) {
+		if (inNum[i] == '1') {
+			inNum[i] = '0';
+		} else {
+			inNum[i] = '1';
+		}
+	}
+	return inNum;
+}
+
 int main() {
 	bool go = true;
 	while (go) {
-		std::string inp;
-		int inNum;
-		int convBase;
-		std::cout << "Enter the value of the number: " << std::endl;
-		std::cin >> inp;
+		std::cout
+				<< "1 for base convert; 2 for binary negativity lol; 0 to exit"
+				<< std::endl;
+		std::string kek;
+		std::cin >> kek;
+		go = kek == "0";
+		if (kek == "1") {
+			std::string inp;
+			int inNum;
+			std::cout << "Enter the value of the number: " << std::endl;
+			std::cin >> inp;
 
-		go = inp.empty();
-		if (go) {
 			std::transform(inp.begin(), inp.end(), inp.begin(), ::toupper);
 			char way;
 			std::cout << "To decimal (t) or from (f)" << std::endl;
@@ -147,11 +193,20 @@ int main() {
 			std::cin >> inNum;
 
 			if (way == 'f') {
-				std::cout << fromDec("", inNum, int(inp)) << std::endl;
+				std::cout << fromDec("", inNum, std::stoi(inp)) << std::endl;
 			}
 			if (way == 't') {
-			std::cout << std::to_string(toDec(inp, inNum)) << std::endl;
+				std::cout << std::to_string(toDec(inp, inNum)) << std::endl;
 			}
+		} else if (kek == "2") {
+			std::cout << "Enter the binary string" << std::endl;
+			std::string inNum;
+			std::cin >> inNum;
+			std::string notString = binaryStringNot(inNum);
+			std::string outp = binaryAddOne(notString);
+			std::cout << "the binary complement is " + outp << std::endl;
+		} else {
+			go = false;
 		}
 	}
 	return 0;
